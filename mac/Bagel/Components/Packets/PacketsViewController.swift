@@ -80,6 +80,11 @@ class PacketsViewController: BaseViewController {
         }
     }
     
+    func reSet() {
+        self.viewModel?.items .removeAll()
+        self.refresh()
+    }
+    
     func setupTableViewHeaders() {
         
         for tableColumn in self.tableView.tableColumns {

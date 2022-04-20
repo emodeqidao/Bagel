@@ -31,6 +31,11 @@ class ProjectsViewController: BaseViewController {
         
         self.tableView.reloadData()
     }
+    
+    func reSet() {
+        self.viewModel?.items.removeAll()
+        self.refresh()
+    }
 }
 
 extension ProjectsViewController: NSTableViewDelegate, NSTableViewDataSource {

@@ -15,21 +15,21 @@ protocol BagelPublisherDelegate {
 }
 
 class BagelPublisher: NSObject {
-
     var delegate: BagelPublisherDelegate?
-    
+    var isOnly: Bool = true
+    var filterHost: [String] = []
     var mainSocket: GCDAsyncSocket!
     var sockets: [GCDAsyncSocket] = []
     var netService: NetService!
     
+    
     func startPublishing() {
         
         self.sockets = []
-        
+    
         self.mainSocket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.global(qos: .background))
 
         do {
-            
             try self.mainSocket.accept(onPort: UInt16(BagelConfiguration.netServicePort))
             
             self.sockets.append(self.mainSocket)
@@ -39,7 +39,6 @@ class BagelPublisher: NSObject {
             self.netService.publish()
             
         } catch {
-            
             self.tryPublishAgain()
         }
         
@@ -64,6 +63,7 @@ class BagelPublisher: NSObject {
             let bagelPacket = try jsonDecoder.decode(BagelPacket.self, from: data)
             
             DispatchQueue.main.async {
+                print(bagelPacket.device?.deviceName ?? "", bagelPacket.device?.deviceId ?? "", bagelPacket.device?.deviceDescription ?? "")
                 self.delegate?.didGetPacket(publisher: self, packet: bagelPacket)
             }
             
@@ -93,7 +93,6 @@ extension BagelPublisher: NetServiceDelegate {
 extension BagelPublisher: GCDAsyncSocketDelegate {
     
     func socket(_ sock: GCDAsyncSocket, didAcceptNewSocket newSocket: GCDAsyncSocket) {
-        
         self.sockets.append(newSocket)
         newSocket.delegate = self
         newSocket.readData(toLength: UInt(MemoryLayout<UInt64>.stride), withTimeout: -1.0, tag: 0)
@@ -102,21 +101,35 @@ extension BagelPublisher: GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         
         if tag == 0 {
-            
+            print("tag = 0")
             let length = self.lengthOf(data: data)
             sock.readData(toLength: UInt(length), withTimeout: -1.0, tag: 1)
             
         } else if tag == 1 {
-            
-            self.parseBody(data: data)
-            sock.readData(toLength: UInt(MemoryLayout<UInt64>.stride), withTimeout: -1.0, tag: 0)
+            print("tag = 1")
+            if (isOnly) {
+                print("仅自己")
+                print("一共有： \(self.filterHost)")
+                let connectHost = sock.connectedHost ?? ""
+                if (self.filterHost.contains(connectHost)) {
+                    print("符合条件：\(connectHost)")
+                    self.parseBody(data: data)
+                    sock.readData(toLength: UInt(MemoryLayout<UInt64>.stride), withTimeout: -1.0, tag: 0)
+                } else {
+                    print("条件不符合 \(connectHost)")
+                }
+            } else {
+                print("所有都接收")
+                self.parseBody(data: data)
+                sock.readData(toLength: UInt(MemoryLayout<UInt64>.stride), withTimeout: -1.0, tag: 0)
+            }
         }
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         
         if self.sockets.contains(sock) {
-            
+            print("有socket 断开了")
             sock.delegate = nil
             
             self.sockets = Array(self.sockets.filter { $0 !== sock })

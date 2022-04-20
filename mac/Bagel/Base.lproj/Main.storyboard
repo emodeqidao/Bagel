@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -621,7 +621,7 @@
                                         <menuItem title="Show Sidebar" keyEquivalent="s" id="kIP-vf-haE">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
-                                                <action selector="toggleSourceList:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
+                                                <action selector="toggleSidebar:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
@@ -809,6 +809,37 @@
                                                     <view key="contentView" id="0tW-SS-WiY">
                                                         <rect key="frame" x="0.0" y="0.0" width="577" height="576"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oQC-B8-1Vw">
+                                                                <rect key="frame" x="9" y="546" width="65" height="31"/>
+                                                                <buttonCell key="cell" type="check" title="仅自己" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Var-GR-hn7">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                                    <connections>
+                                                                        <action selector="checkBoxAction:" target="J2d-qx-gCt" id="SED-1j-4op"/>
+                                                                    </connections>
+                                                                </buttonCell>
+                                                            </button>
+                                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cGe-aD-TZC">
+                                                                <rect key="frame" x="84" y="551" width="477" height="21"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="21" id="Gjy-gI-Cgs"/>
+                                                                </constraints>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="请输入ip，英文逗号隔开" drawsBackground="YES" id="6k7-hM-J73">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="cGe-aD-TZC" firstAttribute="top" secondItem="0tW-SS-WiY" secondAttribute="top" constant="4" id="9Vp-ik-gl1"/>
+                                                            <constraint firstItem="cGe-aD-TZC" firstAttribute="leading" secondItem="oQC-B8-1Vw" secondAttribute="trailing" constant="10" id="URx-5T-CmN"/>
+                                                            <constraint firstItem="oQC-B8-1Vw" firstAttribute="top" secondItem="0tW-SS-WiY" secondAttribute="top" id="Vxw-Tc-ofD"/>
+                                                            <constraint firstAttribute="trailing" secondItem="cGe-aD-TZC" secondAttribute="trailing" constant="16" symbolic="YES" id="mEY-ZV-QhM"/>
+                                                            <constraint firstItem="oQC-B8-1Vw" firstAttribute="leading" secondItem="0tW-SS-WiY" secondAttribute="leading" constant="11" id="pPc-xC-e8g"/>
+                                                            <constraint firstItem="cGe-aD-TZC" firstAttribute="centerY" secondItem="oQC-B8-1Vw" secondAttribute="centerY" id="ym3-fT-h1L"/>
+                                                        </constraints>
                                                     </view>
                                                     <color key="fillColor" white="0.0" alpha="0.040000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </box>
@@ -816,11 +847,11 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="577" height="546"/>
                                                     <subviews>
                                                         <customView id="N0u-KV-KSZ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="577" height="273"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="577" height="363"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <containerView translatesAutoresizingMaskIntoConstraints="NO" id="zwD-c6-zHt">
-                                                                    <rect key="frame" x="10" y="10" width="557" height="263"/>
+                                                                    <rect key="frame" x="10" y="10" width="557" height="353"/>
                                                                     <connections>
                                                                         <segue destination="qMc-Mv-va5" kind="embed" identifier="PacketsViewController" id="gBm-nl-eRp"/>
                                                                     </connections>
@@ -848,11 +879,11 @@
                                                             </constraints>
                                                         </customView>
                                                         <customView id="xC7-k8-PGG">
-                                                            <rect key="frame" x="0.0" y="274" width="577" height="272"/>
+                                                            <rect key="frame" x="0.0" y="364" width="577" height="182"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <containerView translatesAutoresizingMaskIntoConstraints="NO" id="6vH-jg-UZJ">
-                                                                    <rect key="frame" x="10" y="10" width="557" height="252"/>
+                                                                    <rect key="frame" x="10" y="10" width="557" height="162"/>
                                                                     <connections>
                                                                         <segue destination="sEX-Ye-dwa" kind="embed" identifier="DetailViewController" id="x3Z-RC-o5A"/>
                                                                     </connections>
@@ -909,7 +940,9 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="checkBox" destination="Var-GR-hn7" id="Ppi-vy-Cmc"/>
                         <outlet property="devicesBackgroundBox" destination="VBx-aB-Jng" id="Cd2-Nz-3h1"/>
+                        <outlet property="ipTextField" destination="cGe-aD-TZC" id="J6N-wO-Djd"/>
                         <outlet property="packetsBackgroundBox" destination="buX-0C-nYy" id="5vI-qx-nyB"/>
                         <outlet property="projectsBackgroundBox" destination="MdL-Ur-DWv" id="edN-fP-mIh"/>
                     </connections>

@@ -30,14 +30,27 @@ class BagelController: NSObject, BagelPublisherDelegate {
     }
     
     var publisher = BagelPublisher()
-    
+  
     override init() {
         
         super.init()
         self.publisher.delegate = self
-        self.publisher.startPublishing()
         
+        let isOnlyMe : Bool = UserDefaults.standard.bool(forKey: "isOnlyMe")
+        self.publisher.isOnly = isOnlyMe
+        
+        let ip = UserDefaults.standard.string(forKey: "IP") ?? "";
+        let arr = ip.components(separatedBy: ",")
+        
+//        if (arr.count > 0) {
+            self.publisher.filterHost = arr
+//        } else {
+//            self.publisher.filterHost = []
+//        }
+        self.publisher.startPublishing()
     }
+    
+
     
     func didGetPacket(publisher: BagelPublisher, packet: BagelPacket) {
         
@@ -69,7 +82,6 @@ class BagelController: NSObject, BagelPublisherDelegate {
         self.projectControllers.append(projectController)
         
         
-        
         if self.projectControllers.count == 1 {
             
             self.selectedProjectController = self.projectControllers.first
@@ -83,5 +95,13 @@ class BagelController: NSObject, BagelPublisherDelegate {
         if self.selectedProjectController?.selectedDeviceController?.packets.count == 1 {
             self.selectedProjectController?.selectedDeviceController?.notifyPacketSelection()
         }
+    }
+    
+    func reConnect(isOnly: Bool) {
+        self.projectControllers.removeAll()
+        self.publisher.isOnly = isOnly;
+        let ip = UserDefaults.standard.string(forKey: "IP") ?? "";
+        let arr = ip.components(separatedBy: ",")
+        self.publisher.filterHost = arr
     }
 }

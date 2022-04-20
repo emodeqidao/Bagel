@@ -39,6 +39,12 @@ class DevicesViewController: BaseViewController {
         // Do view setup here.
     }
     
+    func reSet() {
+        
+        self.viewModel?.items.removeAll()
+        self.tableView.reloadData()
+    }
+    
 }
 
 extension DevicesViewController: NSTableViewDelegate, NSTableViewDataSource{
